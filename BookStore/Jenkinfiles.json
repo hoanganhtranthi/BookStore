@@ -1,11 +1,10 @@
 {
-  "pipeline" {
-    "agent" "any",
-
-    "stages" {
-      "stage('Hello')" {
-        "steps" {
-          "git" "https://gitlab.com/hoanganhtranthi1610/bookstore.git"
+  pipeline {
+    agent any
+    stages {
+      stage('Clone') {
+        steps {
+          git 'https://gitlab.com/hoanganhtranthi1610/bookstore.git'
         }
       }
     }
