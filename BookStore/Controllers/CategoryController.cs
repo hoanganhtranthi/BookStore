@@ -49,7 +49,7 @@ namespace BookStore.API.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        [Authorize(Roles = "admin")]
+       // [Authorize(Roles = "admin")]
         public async Task<ActionResult<CategoryResponse>> DeleteCategory(int id)
         {
             var rs = await _categoryService.DeleteCategory(id);
