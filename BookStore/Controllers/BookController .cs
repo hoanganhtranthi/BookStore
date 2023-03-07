@@ -40,21 +40,21 @@ namespace BookStore_API.Controllers
             return Ok(rs);
         }
         [HttpPost]
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<BookReponseModel>> CreateBook([FromBody] BookRequestModel model)
         {
             var rs=await _bookRepository.CreateBook(model);
             return Ok();
         }
         [HttpDelete("{id:int}")]
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<BookReponseModel>> DeleteBook(int id)
         {
             var rs = await _bookRepository.DeleteBook(id);
             return Ok();
         }
         [HttpPut("{id:int}")]
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<BookReponseModel>>UpdateBook(int id, [FromBody] BookRequestModel model)
         {
             var rs=await _bookRepository.UpdateBook(id, model);
