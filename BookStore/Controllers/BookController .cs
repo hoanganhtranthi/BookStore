@@ -54,7 +54,7 @@ namespace BookStore_API.Controllers
             return Ok();
         }
         [HttpPut("{id:int}")]
-        [Authorize(Roles = "admin")]
+       // [Authorize(Roles = "admin")]
         public async Task<ActionResult<BookReponseModel>>UpdateBook(int id, [FromBody] BookRequestModel model)
         {
             var rs=await _bookRepository.UpdateBook(id, model);
