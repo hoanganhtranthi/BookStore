@@ -9,7 +9,12 @@ CREATE TABLE Users(
 	Address nvarchar(100),
 	Gender varchar(10),
 	UserName nvarchar(30) not null,
-	Password nvarchar(20) not null,
+	PasswordHash varbinary(max) not null,
+	PasswordSalt varbinary(max) not null,
+	VerificationToken nvarchar(max),
+	VerifiedAt datetime null,
+	PasswordResetToken nvarchar(max) null,
+	ResetTokenExpires datetime null,
 	Email varchar(50)not null,
 	role varchar(10)
 	)
@@ -50,12 +55,12 @@ CREATE TABLE OrderDetails(
 )
 GO
 use BookStore
-Insert into Users values ('2002-10-18','Ho Chi Minh City','Male','admin','admin','admin@gmail.com','Admin')
-Insert into Users values ('2000-09-18 ','Ho Chi Minh City','Female','vinhhung123','123456','vinhhung@gmail.com','Customer')
-Insert into Users values ('2001/01/01','Ha Noi','Male','hieuvuong123','123456','hieuvuong@gmail.com','Customer')
-Insert into Users values ('2002/10/16','Thua Thien Hue','Female','hanh123','123456','hanh@gmail.com','Customer')
-Insert into Users values ('2002/04/22','Da Nang','Male','mytam123','123456','mytam@gmail.com','Customer')
-Insert into Users values ('2002/05/30','Tay Ninh','Female','sontung123','123456','sontung@gmail.com','Customer')
+Insert into Users values ('2002-10-18','Ho Chi Minh City','Male','admin',Convert(varbinary(max),'admin'),Convert(varbinary(max),'admin'),'1999',null,null,null,'admin@gmail.com','Admin')
+Insert into Users values ('2000-09-18 ','Ho Chi Minh City','Female','vinhhung123',Convert(varbinary(max),'123455'),Convert(varbinary(max),'123456'),'2445',null,null,null,'vinhhung@gmail.com','Customer')
+Insert into Users values ('2001/01/01','Ha Noi','Male','hieuvuong123',Convert(varbinary(max),'123455'),Convert(varbinary(max),'123456'),'2445',null,null,null,'hieuvuong@gmail.com','Customer')
+Insert into Users values ('2002/10/16','Thua Thien Hue','Female','hanh123',Convert(varbinary(max),'123455'),Convert(varbinary(max),'123456'),'2445',null,null,null,'hanh@gmail.com','Customer')
+Insert into Users values ('2002/04/22','Da Nang','Male','mytam123',Convert(varbinary(max),'123455'),Convert(varbinary(max),'123456'),'2445',null,null,null,'mytam@gmail.com','Customer')
+Insert into Users values ('2002/05/30','Tay Ninh','Female','sontung123',Convert(varbinary(max),'123455'),Convert(varbinary(max),'123456'),'2445',null,null,null,'sontung@gmail.com','Customer')
 
 insert into Categories(CateName) values('Phe binh van hoc'),('Tieu thuyet'),('Truyen & Tho Ca Dan Gian'),('Truyen Gia Tuong – Than Bi'),('Phong Su, Ky Sy'),('Tho Ca ')
 

@@ -1,6 +1,7 @@
 ﻿using BookStore.Data.Models;
 using BookStore.Service.DTO.Request;
 using BookStore.Service.DTO.Response;
+using Microsoft.AspNetCore.Mvc;
 using NTQ.Sdk.Core.CustomModel;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace BookStore.Service.Service.InterfaceService
     public interface IAuthUserService
     {
         bool IsUniqueUser(string Email);
-        Task<NTQ.Sdk.Core.CustomModel.BaseResponseViewModel<LoginResponse>> Login(LoginRequest loginRequest);
-        Task<NTQ.Sdk.Core.CustomModel.BaseResponseViewModel<UserResponse>> Registeration(RegisterationRequest registerationRequest); 
+        Task<BaseResponseViewModel<LoginResponse>> Login(LoginRequest loginRequest,string emailLogin, ResetPasswordRequest request,EmailRequest emailRequest, bool forgotPass);
+        Task<BaseResponseViewModel<UserResponse>> Registeration(RegisterationRequest registerationRequest);
     }
 }

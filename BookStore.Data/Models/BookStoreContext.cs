@@ -86,7 +86,6 @@ public partial class BookStoreContext : DbContext
             entity.Property(e => e.Gender)
                 .HasMaxLength(10)
                 .IsUnicode(false);
-            entity.Property(e => e.Password).HasMaxLength(20);
             entity.Property(e => e.Role)
                 .HasMaxLength(10)
                 .IsUnicode(false)

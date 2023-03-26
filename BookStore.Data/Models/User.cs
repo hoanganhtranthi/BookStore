@@ -15,7 +15,17 @@ public partial class User
 
     public string UserName { get; set; } = null!;
 
-    public string Password { get; set; } = null!;
+    public byte[] PasswordHash { get; set; }=new byte[32];
+
+    public byte[] PasswordSalt { get; set; } = new byte[32];
+
+    public string? VerificationToken { get; set; }
+
+    public DateTime? VerifiedAt { get; set; }
+
+    public string? PasswordResetToken { get; set; }
+
+    public DateTime? ResetTokenExpires { get; set; }
 
     public string Email { get; set; } = null!;
 

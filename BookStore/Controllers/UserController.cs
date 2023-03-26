@@ -32,6 +32,13 @@ namespace BookStore.API.Controllers
             return Ok(rs);
         }
 
+        [HttpGet("getUserByEmail")]
+        public async Task<ActionResult<UserResponse>> GetUserByEmail(string email)
+        {
+            var rs = await _userService.GetUserByEmail(email);
+            return Ok(rs);
+        }
+
         [HttpPut("{id:int}")]
         public async Task<ActionResult<UserResponse>> UpdateUser([FromBody] UserRequest userRequest, int id)
         {

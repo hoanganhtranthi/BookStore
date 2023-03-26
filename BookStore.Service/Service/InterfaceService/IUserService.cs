@@ -15,5 +15,6 @@ namespace BookStore.Service.Service.InterfaceService
         Task<BaseResponseViewModel<UserResponse>> PutUser(int id, UserRequest model);
         Task<BaseResponseViewModel<UserResponse>> DeleteUser(int id);
         Task<BaseResponseViewModel<UserResponse>> GetUserByID(int id);
+        Task<BaseResponseViewModel<UserResponse>> GetUserByEmail(string email);
     }
 }

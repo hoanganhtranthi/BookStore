@@ -1,4 +1,5 @@
 
+using BookStore.API.Hangfire;
 using BookStore.Data.Extensions;
 using BookStore.Data.Models;
 using BookStore.Data.Repository;
@@ -7,12 +8,16 @@ using BookStore.Service;
 using BookStore.Service.Service.ImplService;
 using BookStore.Service.Service.InterfaceService;
 using BusinessTier.Mapper;
+using Google.Apis.Auth.AspNetCore3;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Owin;
 using ServiceStack.Redis;
 using System.Text;
 
@@ -74,6 +79,7 @@ builder.Services.AddAuthentication(x =>
     });
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddAutoMapper(typeof(Mapping));
 builder.Services.AddStackExchangeRedisCache(options =>
 {
@@ -93,6 +99,9 @@ builder.Services.AddScoped<IAuthUserService, AuthUserService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IReturnOrderService, ReturnOrderService>();
 builder.Services.AddScoped<ICacheService, CacheService>();
+
+builder.Services.ConfigureHangfireServices(builder.Configuration);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -107,5 +116,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseHangfireDashboard();
 
 app.Run();

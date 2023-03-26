@@ -9,7 +9,7 @@ namespace BookStore.Service.DTO.Response
 {
     public class LoginResponse
     {
-        public User User { get; set; }
+        public UserResponse User { get; set; }
         public string Token { get; set; }
     }
 }

@@ -60,6 +60,53 @@ namespace BookStore.Service.Service.ImplService
             }
         }
 
+        public async Task<BaseResponseViewModel<UserResponse>> GetUserByEmail(string email)
+        {
+            try
+            {
+                var cacheData = _cacheService.GetData<UserResponse>($"User{email}");
+                if (cacheData == null)
+                {
+
+                    if (email.Equals(""))
+                    {
+                        throw new CrudException(HttpStatusCode.BadRequest, "Id User Invalid", "");
+                    }
+                    var response = await _unitOfWork.Repository<User>().GetAsync(u => u.Email == email);
+
+                    var expiryTime = DateTimeOffset.Now.AddMinutes(2);
+                    cacheData = _mapper.Map<UserResponse>(response);
+                    _cacheService.SetData<UserResponse>($"User{email}", cacheData, expiryTime);
+
+                    return new BaseResponseViewModel<UserResponse>()
+                    {
+                        Status = new StatusViewModel
+                        {
+                            ErrorCode = 0,
+                            Message = "sucess",
+                            Success = true
+                        },
+                        Data = cacheData
+                    };
+                }
+
+                return new BaseResponseViewModel<UserResponse>()
+                {
+                    Status = new StatusViewModel
+                    {
+                        ErrorCode = 0,
+                        Message = "sucess",
+                        Success = true
+                    },
+                    Data = cacheData
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new CrudException(HttpStatusCode.BadRequest, "Get User By Email Error!!!", ex.InnerException?.Message);
+            }
+        }
+
         public async Task<BaseResponseViewModel<UserResponse>> GetUserByID(int id)
         {
             try

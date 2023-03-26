@@ -25,6 +25,8 @@ namespace BookStore.Service.DTO.Response
         [StringAttribute]
         public string? Password { get; set; }
         [StringAttribute]
+        public string? PasswordResetToken { get; set; }
+        [StringAttribute]
         public string? Email { get; set; }
     }
 }
