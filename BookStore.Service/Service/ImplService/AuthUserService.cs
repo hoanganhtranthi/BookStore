@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BookStore.Data.Extensions;
 using BookStore.Data.Models;
 using BookStore.Data.UnitOfWork;
 using BookStore.Service.DTO.Request;
@@ -35,16 +34,14 @@ namespace BookStore.Service.Service.ImplService
         private string? _secretKey;
         private IMapper _mapper;
         private IEmailService _emailService;
-        private readonly ICacheService _cacheService;
 
-        public AuthUserService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration, IEmailService emailService,ICacheService cacheService)
+        public AuthUserService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration, IEmailService emailService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _secretKey = configuration.GetValue<string>("ApiSetting:Secret");
             _emailService = emailService;
-            _cacheService= cacheService;
-    }
+        }
 
         public bool IsUniqueUser(string Email)
         {
