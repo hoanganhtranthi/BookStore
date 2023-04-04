@@ -5,6 +5,8 @@ using BookStore.Data.Models;
 using BookStore.Data.Repository;
 using BookStore.Data.UnitOfWork;
 using BookStore.Service;
+using BookStore.Service.ImplService;
+using BookStore.Service.InterfaceService;
 using BookStore.Service.Service.ImplService;
 using BookStore.Service.Service.InterfaceService;
 using BusinessTier.Mapper;
@@ -80,6 +82,8 @@ builder.Services.AddAuthentication(x =>
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<IFileStorageService, FirebaseStorageService>();
 builder.Services.AddAutoMapper(typeof(Mapping));
 builder.Services.AddStackExchangeRedisCache(options =>
 {

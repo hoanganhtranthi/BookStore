@@ -22,6 +22,8 @@ using NTQ.Sdk.Core.BaseConnect;
 using NTQ.Sdk.Core.CustomModel;
 using NTQ.Sdk.Core.Utilities;
 using NTQ.Sdk.Core.ViewModels;
+using Org.BouncyCastle.Asn1.Ocsp;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -347,6 +349,77 @@ namespace BookStore.Service
             {
                 throw new CrudException(HttpStatusCode.BadRequest, "Update Order Error !", ex.InnerException?.Message);
             }
+        }
+
+      public async  Task<BaseResponseViewModel<OrderReponseModel>> UpdateStatusOrder(int id, StatusType.StatusOrder orderStatus)
+        {
+            try
+            {
+                var order = await _unitOfWork.Repository<OrderBook>().GetAll()
+                            .Where(x => x.OrderId == id)
+                            .FirstOrDefaultAsync();
+                order.Status = (int)orderStatus;
+
+                //cancel order
+                if (order.Status == 3)
+                {
+                    foreach (var detail in order.OrderDetails)
+                    {
+                        //update lai currentQuantity cua Book
+                        var product = _unitOfWork.Repository<Book>().GetAll()
+                            .Include(x => x.Cate)
+                            .Where(x => x.BookId == detail.BookId)
+                            .FirstOrDefault();
+                        product.CurrentQuantity = product.CurrentQuantity + detail.Quantity;
+
+                        await _unitOfWork.Repository<Book>().Update(product, product.BookId);
+                    }                   
+
+                }
+
+                await _unitOfWork.Repository<OrderBook>().Update(order,order.OrderId);
+                await _unitOfWork.CommitAsync();
+
+                return new BaseResponseViewModel<OrderReponseModel>()
+                {
+                    Status = new StatusViewModel()
+                    {
+                        Message = "Sucess",
+                        Success = true,
+                        ErrorCode = 0
+                    },
+                    Data = _mapper.Map<OrderReponseModel>(order)
+                };
+            }
+            catch (Exception e)
+            {
+                throw new CrudException(HttpStatusCode.BadRequest, "Update Status Order Error", e.Message);
+            }
+        }
+
+        public async Task<dynamic> GetOrdersReportByDate()
+        {
+            var startdate = DateTime.Today;
+            var endDate = startdate.AddDays(+1);
+            var ordersTotal = _unitOfWork.Repository<OrderBook>()
+                .FindAll(p =>
+                    p.OrderDate >= startdate && p.OrderDate <= endDate)
+                .AsNoTracking().Count();
+            var ordersNew = _unitOfWork.Repository<OrderBook>()
+                .FindAll(p =>
+                     p.OrderDate >= startdate && p.OrderDate <= endDate && p.Status ==(int) StatusType.StatusOrder.Borrowing)
+                .AsNoTracking().Count();
+            var ordersCancel = _unitOfWork.Repository<OrderBook>()
+                .FindAll(p =>
+                    p.OrderDate >= startdate && p.OrderDate <= endDate && p.Status == (int)StatusType.StatusOrder.Cancel)
+                .AsNoTracking().Count();
+            return new
+            {
+                Date = startdate,
+                Total = ordersTotal,
+                New = ordersNew,
+                Cancel = ordersCancel
+            };
         }
     }
 }

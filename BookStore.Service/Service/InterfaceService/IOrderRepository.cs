@@ -1,5 +1,6 @@
 ﻿using BookStore.Service.DTO.Request;
 using BookStore.Service.DTO.Response;
+using BookStore.Service.Helpers;
 using DataAcess.RequestModels;
 using DataAcess.ResponseModels;
 using NTQ.Sdk.Core.CustomModel;
@@ -19,6 +20,8 @@ namespace BookStore.Service.Service.InterfaceService
         Task<BasePagingViewModel<OrderReponseModel>> GetOrders(PagingRequest request, OrderRequestModel model);
         Task<BaseResponseViewModel<OrderDetailReponseModel>>UpdateItemOfOrder(int id, OrderDetailUpdateRequestModel order);
         Task<BaseResponseViewModel<OrderDetailReponseModel>> DeleteItemOfOrder(int id);
+        Task<BaseResponseViewModel<OrderReponseModel>> UpdateStatusOrder(int id, StatusType.StatusOrder orderStatus);
+        Task<dynamic> GetOrdersReportByDate();
 
     }
 }

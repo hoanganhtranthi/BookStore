@@ -16,7 +16,7 @@ namespace BookStore.Service
 {
     public interface IBookRepository
     {
-        Task<BaseResponseViewModel<BookReponseModel>> CreateBook(BookRequestModel model);
+         Task<BaseResponseViewModel<BookReponseModel>> CreateBook(BookRequestModel model);
         Task<BaseResponseViewModel<BookReponseModel>> GetBook(int id);
         Task<BaseResponseViewModel<List<BookReponseModel>>> GetBookByCateById(int cateId);
         Task<BasePagingViewModel<BookReponseModel>> GetBooks(PagingRequest? request,BookRequestModel? model);

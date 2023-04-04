@@ -12,7 +12,8 @@ namespace BookStore.Service.Helpers
         {
             Returned = 0,
             Borrowing = 1,
-            Overdue = 2
+            Overdue = 2,
+            Cancel= 3
         }
     }
 }

@@ -40,12 +40,6 @@ namespace BookStore.Service
         private readonly IMapper _mapper;
         private readonly ICacheService _cacheService;
 
-        IFirebaseConfig config = new FirebaseConfig
-        {
-            AuthSecret = "guEzEFK72W3mPyoL244xtL2T96yiDGF7UBah1AVh",
-            BasePath = "https://bookstoreapi-abbce-default-rtdb.firebaseio.com/"
-        };
-
         public BookRepository(IUnitOfWork unitOfWork, IMapper mapper, ICacheService cache)
         {
             _unitOfWork = unitOfWork;
@@ -58,11 +52,6 @@ namespace BookStore.Service
             try
             {
                 if (model == null) throw new CrudException(HttpStatusCode.BadRequest, "Input Invalid", "");
-
-                IFirebaseClient _client = new FireSharp.FirebaseClient(config);
-                var data = model;
-                PushResponse response = _client.Push("Book/", data);
-                SetResponse setResponse = _client.Set("Book/" + data.BookName, data);
 
                 var rs = _unitOfWork.Repository<Book>()
                     .GetAll()
