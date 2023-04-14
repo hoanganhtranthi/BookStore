@@ -34,39 +34,44 @@ namespace BookStore.Service.Service.ImplService
             {
                 //kiểm tra user có input chưa
                 if (returnRequest == null)
-                    throw new Exception();
+                    throw new CrudException(HttpStatusCode.NotFound, "Information Invalid", "");
+
+
                 //lấy user dựa theo userID được input
                 var user = _unitOfWork.Repository<User>().GetAll().FirstOrDefault(u => u.UserId == userId);
-                if (user == null) 
-                    throw new Exception();
-                
+                if (user == null)
+                    throw new CrudException(HttpStatusCode.NotFound, "User Not Found", "");
+
                 //lấy orderBook đang được mượn của userID được nhập
                 var orderBook = _unitOfWork.Repository<OrderBook>().GetAll().Include(u => u.OrderDetails)
                                                         .FirstOrDefault(u => u.OrderId == returnRequest.OrderID && u.UserId == userId);
                 if(orderBook == null) 
                     throw new Exception();
+
+
                 //ktra nếu status được trả rồi thì báo lỗi
                 if (orderBook.Status == (int)StatusType.StatusOrder.Returned)
-                    throw new Exception();
+                    throw new CrudException(HttpStatusCode.NotFound, "Information Invalid", "");
 
- 
+
                 var orderDetailList = orderBook.OrderDetails.ToList();
+
                 //lấy orderdetail dựa trên bookID user muốn trả 
                 var orderDetail = orderDetailList.FirstOrDefault(u => u.BookId == returnRequest.BookID);
-                if (orderDetail == null) 
-                    throw new Exception();
+                if (orderDetail == null)
+                    throw new CrudException(HttpStatusCode.NotFound, "BookId has no order detail of this user", "");
 
                 //quantity trả mà lớn hơn quantity mượn => bảo lỗi
-                if (returnRequest.Quantity > orderDetail.Quantity - orderDetail.ReturnedQuantity) 
-                    throw new Exception();
+                if (returnRequest.Quantity > orderDetail.Quantity - orderDetail.ReturnedQuantity)
+                    throw new CrudException(HttpStatusCode.NotFound, "The returned quantity is higher than borrowed quantity", "");
 
-      
-                if (returnRequest.Quantity > orderDetail.Quantity) throw new Exception();
+
+                if (returnRequest.Quantity > orderDetail.Quantity) throw new CrudException(HttpStatusCode.NotFound, "The returned quantity is higher than borrowed quantity", "");
 
                 var book = _unitOfWork.Repository<Book>().GetAll()
                                       .FirstOrDefault(u => u.BookId == returnRequest.BookID);
-                if (book == null) 
-                    throw new Exception();
+                if (book == null)
+                    throw new CrudException(HttpStatusCode.NotFound, "Book Not Found", "");
 
                 //2 trường hợp:
                 // TH1: trả hết 

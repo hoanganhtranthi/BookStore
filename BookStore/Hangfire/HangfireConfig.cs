@@ -12,7 +12,7 @@ namespace BookStore.API.Hangfire
             {
                 config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                     .UseSimpleAssemblyNameTypeSerializer()
-                    .UseDefaultTypeSerializer()
+                    .UseDefaultTypeSerializer()                                                  
                     .UseMemoryStorage()
                     .UseSqlServerStorage(configuration.GetConnectionString("HangfireConnection"),
                         new SqlServerStorageOptions()
